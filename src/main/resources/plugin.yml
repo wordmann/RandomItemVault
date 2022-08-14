@@ -1,0 +1,14 @@
+name: RandomVault
+version: '${project.version}'
+main: mc.wordrc.randomvault.RandomVault
+api-version: 1.19
+authors: [ wordrc ]
+description: A Minecraft Spigot plugin that implements a player vault-like inventory filled with everchanging random items. nya :3
+website: https://word-it.pages.dev/
+commands:
+  randvault:
+    descruption: Opens the player's personal vault.
+    usage: /<command> [trigger|toggle|timings] [delay] [period]
+permissions:
+  funkyplugin.admin:
+    default: op
