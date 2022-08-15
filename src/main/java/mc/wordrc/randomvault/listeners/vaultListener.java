@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -17,6 +18,11 @@ import java.util.HashMap;
 
 public class vaultListener implements Listener {
 
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent e) {
+        e.getPlayer().getPersistentDataContainer().set(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.openInvId"), PersistentDataType.INTEGER, 0);
+    }
+
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) throws IOException {
@@ -24,7 +30,7 @@ public class vaultListener implements Listener {
         Player p = (Player) e.getPlayer();
         Inventory vaultInv = (Inventory) e.getInventory();
 
-        if (p.getPersistentDataContainer().get(new NamespacedKey(RandomVault.getPlugin(), "isVaultOpen"), PersistentDataType.INTEGER)==1){
+        if (p.getPersistentDataContainer().get(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.openInvId"), PersistentDataType.INTEGER)==1){
 
             HashMap<Integer, ItemStack> vaultContents = new HashMap<>();
 
@@ -36,7 +42,7 @@ public class vaultListener implements Listener {
             }
 
             vaultUtils.storeItem(vaultContents, p);
-            p.getPersistentDataContainer().set(new NamespacedKey(RandomVault.getPlugin(), "isVaultOpen"), PersistentDataType.INTEGER, 0);
+            p.getPersistentDataContainer().set(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.openInvId"), PersistentDataType.INTEGER, 0);
         }
 
     }

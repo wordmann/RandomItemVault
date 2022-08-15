@@ -20,7 +20,7 @@ public class vaultUtils {
         PersistentDataContainer data = p.getPersistentDataContainer();
 
         if(vaultContents.size() == 0){
-            data.set(new NamespacedKey(mc.wordrc.randomvault.RandomVault.getPlugin(), "vault"), PersistentDataType.STRING, "");
+            data.set(new NamespacedKey(mc.wordrc.randomvault.RandomVault.getPlugin(), "RandomVault.vault"), PersistentDataType.STRING, "");
         }else{
 
             try {
@@ -34,7 +34,7 @@ public class vaultUtils {
 
                 String encodedData = Base64.getEncoder().encodeToString(rawData);
 
-                data.set(new NamespacedKey(mc.wordrc.randomvault.RandomVault.getPlugin(), "vault"), PersistentDataType.STRING, encodedData);
+                data.set(new NamespacedKey(mc.wordrc.randomvault.RandomVault.getPlugin(), "RandomVault.vault"), PersistentDataType.STRING, encodedData);
 
                 os.close();
 
@@ -49,7 +49,7 @@ public class vaultUtils {
         PersistentDataContainer data = p.getPersistentDataContainer();
         HashMap<Integer, ItemStack> vaultContents = new HashMap<>();
 
-        String encodedData = data.get(new NamespacedKey(mc.wordrc.randomvault.RandomVault.getPlugin(), "vault"), PersistentDataType.STRING);
+        String encodedData = data.get(new NamespacedKey(mc.wordrc.randomvault.RandomVault.getPlugin(), "RandomVault.vault"), PersistentDataType.STRING);
 
 
         if (!encodedData.isEmpty()){

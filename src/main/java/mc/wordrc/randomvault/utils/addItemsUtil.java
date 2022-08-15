@@ -1,5 +1,6 @@
 package mc.wordrc.randomvault.utils;
 
+import mc.wordrc.randomvault.RandomVault;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
@@ -22,9 +23,10 @@ public class addItemsUtil {
 
             HashMap<Integer, ItemStack> itemBatch = new HashMap<>();
             Material[] mats = Material.values(); //array with all materials
-            for (int i = 0; i < 27; i++) {
+            int size = RandomVault.getPlugin().getConfig().getInt(RandomVault.getPlugin().getServer().getWorlds().get(0).toString()+ ".size", 27);
+            for (int i = 0; i < size; i++) {
                 ItemStack item = new ItemStack(mats[new Random().nextInt(mats.length)]);
-                while (item.getType().equals(Material.AIR) | !item.getType().isItem()) {
+                while (item.getType().isAir() | !item.getType().isItem()) {
                     item = new ItemStack(mats[new Random().nextInt(mats.length)]);
                 }
 
@@ -34,10 +36,10 @@ public class addItemsUtil {
 
             mc.wordrc.randomvault.RandomVault.getPlugin().getServer().getOnlinePlayers().forEach(player -> {
                 TextComponent message = new TextComponent(ChatColor.YELLOW + "You have received a new batch of items! /randvault");
-                message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "vault"));
+                message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/randvault"));
                 player.spigot().sendMessage(message);
 
-                if (player.getPersistentDataContainer().get(new NamespacedKey(mc.wordrc.randomvault.RandomVault.getPlugin(), "isVaultOpen"), PersistentDataType.INTEGER) == 1) {
+                if (player.getPersistentDataContainer().get(new NamespacedKey(mc.wordrc.randomvault.RandomVault.getPlugin(), "RandomVault.openInvId"), PersistentDataType.INTEGER) == 1) {
                     player.closeInventory();
                 }
 

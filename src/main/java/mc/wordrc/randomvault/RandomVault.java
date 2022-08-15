@@ -4,7 +4,9 @@ import mc.wordrc.randomvault.commands.*;
 import mc.wordrc.randomvault.listeners.*;
 import mc.wordrc.randomvault.tasks.*;
 import mc.wordrc.randomvault.utils.taskManagementUtil;
+import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -29,6 +31,10 @@ public final class RandomVault extends JavaPlugin implements Listener {
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
+
+        getServer().getOnlinePlayers().forEach(player -> {
+            player.getPersistentDataContainer().set(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.openInvId"), PersistentDataType.INTEGER, 0);
+        });
 
         taskManagementUtil.loadVaultSettings();
     }
