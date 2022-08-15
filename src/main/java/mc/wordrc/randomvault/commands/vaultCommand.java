@@ -1,7 +1,10 @@
 package mc.wordrc.randomvault.commands;
 
+import mc.wordrc.randomvault.RandomVault;
 import mc.wordrc.randomvault.tasks.addItemsTask;
+import mc.wordrc.randomvault.utils.ColorUtils;
 import mc.wordrc.randomvault.utils.addItemsUtil;
+import mc.wordrc.randomvault.utils.taskManagementUtil;
 import mc.wordrc.randomvault.utils.vaultUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -49,36 +52,28 @@ public class vaultCommand implements TabExecutor {
 
         } else if (args[0].equalsIgnoreCase("toggle") && sender.hasPermission("randomvault.admin")) {
 
-            if (!mc.wordrc.randomvault.RandomVault.getPlugin().getConfig().getBoolean(mc.wordrc.randomvault.RandomVault.getPlugin().getServer().getWorlds().get(0).toString() + ".randItemsToggle")){
-                p.sendMessage(ChatColor.GRAY + "Random vault is now: ON");
-                System.out.println("vault is ON");
-                mc.wordrc.randomvault.RandomVault.getPlugin().getConfig().set(mc.wordrc.randomvault.RandomVault.getPlugin().getServer().getWorlds().get(0).toString()+".randItemsToggle", true);}
-
+            if (taskManagementUtil.toggleVault()){
+            p.sendMessage(ChatColor.GRAY + "Random vault is now: " + ChatColor.DARK_GRAY + "ON");}
             else{
-                p.sendMessage(ChatColor.GRAY + "Random vault is now: OFF");
-                System.out.println("vault is OFF");
-                mc.wordrc.randomvault.RandomVault.getPlugin().getConfig().set(mc.wordrc.randomvault.RandomVault.getPlugin().getServer().getWorlds().get(0).toString()+".randItemsToggle", false);}
-
-                mc.wordrc.randomvault.RandomVault.getPlugin().saveConfig();
+            p.sendMessage(ChatColor.GRAY + "Random vault is now: " + ChatColor.DARK_GRAY + "OFF");}
 
         } else if (args[0].equalsIgnoreCase("timings") && sender.hasPermission("randomvault.admin")) {
-            p.sendMessage(ChatColor.GRAY + "Setting delay to " + ChatColor.DARK_GRAY +  args[1] + ChatColor.GRAY + " seconds and period to " + ChatColor.DARK_GRAY + args[2] + ChatColor.GRAY + " seconds");
-            mc.wordrc.randomvault.RandomVault.getPlugin().getConfig().set((mc.wordrc.randomvault.RandomVault.getPlugin().getServer().getWorlds().get(0).toString()+".delay"), Long.valueOf(args[1]));
-            mc.wordrc.randomvault.RandomVault.getPlugin().getConfig().set((mc.wordrc.randomvault.RandomVault.getPlugin().getServer().getWorlds().get(0).toString()+".period"), Long.valueOf(args[2]));
 
+            if (args.length>1) {
+                p.sendMessage(ChatColor.GRAY + "Setting delay to " + ChatColor.DARK_GRAY + args[1] + ChatColor.GRAY + " seconds and period to " + ChatColor.DARK_GRAY + args[2] + ChatColor.GRAY + " seconds");
+                try {
+                taskManagementUtil.modifyTimings(Long.valueOf(args[1]), Long.valueOf(args[2]));}
+                catch (NumberFormatException exception) {
+                    p.sendMessage(ChatColor.RED + "Please provide periods in seconds. /randvault timings <delay> <period>");
+                }
+            }else{
+                p.sendMessage(ChatColor.GRAY + "Delay set to " + ChatColor.DARK_GRAY +
+                    RandomVault.getPlugin().getConfig().getLong(RandomVault.getPlugin().getServer().getWorlds().get(0).toString()+".delay")
+                + ChatColor.GRAY + " seconds and period to " + ChatColor.DARK_GRAY +
+                    RandomVault.getPlugin().getConfig().getLong(RandomVault.getPlugin().getServer().getWorlds().get(0).toString()+".period")
+                + ChatColor.GRAY + " seconds");
+            }
 
-
-            mc.wordrc.randomvault.RandomVault.getPlugin().getServer().getScheduler().cancelTask(
-                    mc.wordrc.randomvault.RandomVault.getPlugin().getConfig().getInt(mc.wordrc.randomvault.RandomVault.getPlugin().getServer().getWorlds().get(0).toString()+".taskid")
-            );
-
-
-            BukkitTask randTask = (BukkitTask) new addItemsTask(mc.wordrc.randomvault.RandomVault.getPlugin()).runTaskTimer(mc.wordrc.randomvault.RandomVault.getPlugin(),
-                    ((mc.wordrc.randomvault.RandomVault.getPlugin().getConfig().getLong(mc.wordrc.randomvault.RandomVault.getPlugin().getServer().getWorlds().get(0).toString()+".delay"))* 20L),
-                    ((mc.wordrc.randomvault.RandomVault.getPlugin().getConfig().getLong(mc.wordrc.randomvault.RandomVault.getPlugin().getServer().getWorlds().get(0).toString()+".period"))* 20L));
-
-            mc.wordrc.randomvault.RandomVault.getPlugin().getConfig().set(mc.wordrc.randomvault.RandomVault.getPlugin().getServer().getWorlds().get(0).toString()+".taskid", randTask.getTaskId());
-            mc.wordrc.randomvault.RandomVault.getPlugin().saveConfig();
         }else{
             System.out.println("im so tired");
             sender.sendMessage("Invalid argument");

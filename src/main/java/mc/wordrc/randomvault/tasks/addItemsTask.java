@@ -10,14 +10,8 @@ public class addItemsTask extends BukkitRunnable {
         this.plugin = plugin;
     }
 
-
-
-
-
     @Override
     public void run() {
-        if (mc.wordrc.randomvault.RandomVault.getPlugin().getConfig().getBoolean(mc.wordrc.randomvault.RandomVault.getPlugin().getServer().getWorlds().get(0).toString() + ".randItemsToggle", false)) {
             addItemsUtil.addItems();
-        }
     }
 }
