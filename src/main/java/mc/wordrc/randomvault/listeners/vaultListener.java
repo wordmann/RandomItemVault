@@ -21,6 +21,9 @@ public class vaultListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         e.getPlayer().getPersistentDataContainer().set(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.openInvId"), PersistentDataType.INTEGER, 0);
+        if (!e.getPlayer().hasPlayedBefore()){
+        e.getPlayer().getPersistentDataContainer().set(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.overflowNotif"), PersistentDataType.INTEGER, 1);
+        e.getPlayer().getPersistentDataContainer().set(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.fullNotif"), PersistentDataType.INTEGER, 1);}
     }
 
 
@@ -32,14 +35,7 @@ public class vaultListener implements Listener {
 
         if (p.getPersistentDataContainer().get(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.openInvId"), PersistentDataType.INTEGER)==1){
 
-            HashMap<Integer, ItemStack> vaultContents = new HashMap<>();
-
-            for (int i = 0; i < vaultInv.getSize(); i++){
-                try {
-                    vaultContents.put(i, vaultInv.getItem(i));
-                } catch (NullPointerException ignored) {
-                }
-            }
+            HashMap<Integer, ItemStack> vaultContents = vaultUtils.getHashMap(vaultInv);
 
             vaultUtils.storeItem(vaultContents, p);
             p.getPersistentDataContainer().set(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.openInvId"), PersistentDataType.INTEGER, 0);
