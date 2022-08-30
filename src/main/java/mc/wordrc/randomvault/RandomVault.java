@@ -4,6 +4,7 @@ import mc.wordrc.randomvault.commands.*;
 import mc.wordrc.randomvault.listeners.*;
 import mc.wordrc.randomvault.tasks.*;
 import mc.wordrc.randomvault.utils.taskManagementUtil;
+import mc.wordrc.randomvault.utils.vaultUtils;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 import org.bukkit.persistence.PersistentDataType;
@@ -32,12 +33,7 @@ public final class RandomVault extends JavaPlugin implements Listener {
         getConfig().options().copyDefaults();
         saveDefaultConfig();
 
-        getServer().getOnlinePlayers().forEach(player -> {
-            player.getPersistentDataContainer().set(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.openInvId"), PersistentDataType.INTEGER, 0);
-            if (player.getPersistentDataContainer().get(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.overflowNotif"), PersistentDataType.INTEGER)==null){
-                player.getPersistentDataContainer().set(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.overflowNotif"), PersistentDataType.INTEGER, 1);
-                player.getPersistentDataContainer().set(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.fullNotif"), PersistentDataType.INTEGER, 1);}
-        });
+        getServer().getOnlinePlayers().forEach(vaultUtils::initializeNBTs);
 
         taskManagementUtil.loadVaultSettings();
     }

@@ -8,7 +8,11 @@ website: https://word-it.pages.dev/
 commands:
   randvault:
     descruption: Opens the player's personal vault.
-    usage: /<command> [trigger|toggle|timings] [delay] [period]
+    usage: /<command>
 permissions:
-  funkyplugin.admin:
+  randomvault.use:
+    description: Allows '/randvault' command.
+    default: true
+  randomvault.admin:
+    description: Allows to change settings relative to item spawning.
     default: op

@@ -33,8 +33,13 @@ public class addItemsUtil {
 
             RandomVault.getPlugin().getServer().getOnlinePlayers().forEach(player -> {
 
+                if (player.hasPermission("randomvault.use"))
+
                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 5 , 5);
-                player.performCommand("tellraw @a [\"\",{\"text\":\"You have received a new batch of items! \",\"color\":\"green\"},{\"text\":\"/randvault\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/randvault\"}}]");
+
+                if (player.hasPermission("randomvault.use")|player.hasPermission("randomvault.admin")) {
+                    Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), "tellraw " + player.getName() + " [\"\",{\"text\":\"You have received a new batch of items! \",\"color\":\"green\"},{\"text\":\"/randvault\",\"color\":\"dark_green\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/randvault\"}}]");
+                }
 
                 if (player.getPersistentDataContainer().get(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.openInvId"), PersistentDataType.INTEGER) == 1) {
                     player.closeInventory();

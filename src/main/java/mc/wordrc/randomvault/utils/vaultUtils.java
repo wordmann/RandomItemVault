@@ -2,8 +2,8 @@ package mc.wordrc.randomvault.utils;
 
 import mc.wordrc.randomvault.RandomVault;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -15,9 +15,40 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class vaultUtils {
+
+
+    public static Player getPlayer (CommandSender sender){
+        if (sender instanceof Player p){
+            return p;
+        }else{
+            vaultUtils.sendMessage("Command only available to players.", sender);
+            return null;
+        }
+    }
+
+    public static void sendMessage (String message, CommandSender sender) {
+        if (sender instanceof Player p){
+            p.sendMessage(message);
+        }else{
+            Bukkit.getLogger().info(message);
+        }
+
+    }
+
+
+    public static void initializeNBTs (Player player) {
+
+        String[] keys = {"RandomVault.overflowNotif","RandomVault.itemsNotif","RandomVault.fullNotif"};
+
+        for(String key : keys){
+        if (player.getPersistentDataContainer().get(new NamespacedKey(RandomVault.getPlugin(), key), PersistentDataType.INTEGER)==null){
+            player.getPersistentDataContainer().set(new NamespacedKey(RandomVault.getPlugin(), "key"), PersistentDataType.INTEGER, 1);}}
+
+    }
 
     public static Boolean toggleNBT (String key, Player p){
 

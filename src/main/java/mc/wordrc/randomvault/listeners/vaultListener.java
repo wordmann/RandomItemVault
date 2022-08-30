@@ -21,10 +21,7 @@ public class vaultListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         e.getPlayer().getPersistentDataContainer().set(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.openInvId"), PersistentDataType.INTEGER, 0);
-        if (!e.getPlayer().hasPlayedBefore()){
-        e.getPlayer().getPersistentDataContainer().set(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.overflowNotif"), PersistentDataType.INTEGER, 1);
-        e.getPlayer().getPersistentDataContainer().set(new NamespacedKey(RandomVault.getPlugin(), "RandomVault.fullNotif"), PersistentDataType.INTEGER, 1);}
-    }
+        vaultUtils.initializeNBTs(e.getPlayer());}
 
 
     @EventHandler
